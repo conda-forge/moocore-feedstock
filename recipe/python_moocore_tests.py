@@ -60,7 +60,7 @@ def setup_test_cwd(td: str, conf_py: Path) -> Path:
     with tarfile.open(ttf, "r:gz") as tfh:
         tfh.extractall(td)
 
-    shutil.copy2(Path(cwd / "src/conftest.py"), conf_py)
+    shutil.copy2(Path(cwd / "conftest.py"), conf_py)
     return cwd
 
 
