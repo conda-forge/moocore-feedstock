@@ -23,7 +23,7 @@ source:
   sha256: fa41ba4cd42622fb373b24d547bd6c4125df814b701a6d655e80af116a442987
 
 build:
-  number: 0
+  number: 1
 
 outputs:
   # TODO?
