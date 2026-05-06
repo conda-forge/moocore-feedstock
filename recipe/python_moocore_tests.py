@@ -2,6 +2,7 @@ import os
 import shutil
 import site
 import sys
+import time
 import tarfile
 
 
@@ -9,6 +10,7 @@ from pathlib import Path
 from subprocess import call
 from tempfile import TemporaryDirectory
 from urllib.request import urlretrieve
+from urllib.error import HTTPError
 
 COV_FAIL_UNDER = 78
 
@@ -50,12 +52,28 @@ COV_CMDS = [
 
 
 def setup_test_cwd(td: str, conf_py: Path) -> Path:
-    """Re-download the sdist because the test fixtures are big, fix some paths."""
+    """Re-download the GitHub tarball because the test fixtures are big, fix paths."""
     tdp = Path(td)
     cwd = tdp / f"moocore-{PKG_VERSION}/python"
     ttf = tdp / TARBALL
+    last_error: HTTPError | None = None
 
-    urlretrieve(URL, ttf)
+    for attempt in range(10):
+        duration = 5 + (2**attempt)
+        try:
+            urlretrieve(URL, ttf)
+            last_error = None
+            break
+        except HTTPError as err:
+            print(f"!!! {err}")
+            print(f"... retrying in {duration} seconds")
+            last_error = err
+            print(f"{err}")
+            time.sleep(duration)
+
+    if not ttf.is_file():
+        msg = f"failed to retrieve tarball: {URL}"
+        raise last_error or RuntimeError(msg)
 
     with tarfile.open(ttf, "r:gz") as tfh:
         tfh.extractall(td)
