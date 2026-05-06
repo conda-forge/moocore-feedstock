@@ -2,7 +2,7 @@
 schema_version: 1
 
 context:
-  version: "0.2.0"
+  version: "0.3.1"
   py_cffi_min: "1.17.1"
   # test
   python_check_max: "3.14"
@@ -20,7 +20,7 @@ recipe:
 
 source:
   url: https://github.com/multi-objective/moocore/archive/refs/tags/v${{ version }}.tar.gz
-  sha256: fa41ba4cd42622fb373b24d547bd6c4125df814b701a6d655e80af116a442987
+  sha256: 4d52730b1df1d9c530791aca18edc759b2944026dd70cb505a6cec08a1c2f66c
 
 build:
   number: 1
